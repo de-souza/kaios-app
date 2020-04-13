@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "name": "KaiOS Template",
+  "description": "A simple template for building KaiOS apps",
+  "type": "web",
+  "launch_path": "/index.html",
+  "icons": {
+    "56": "/style/KaiOSTemplate_56.png",
+    "112": "/style/KaiOSTemplate_112.png"
+  },
+  "developer": {
+    "name": "Léo De Souza",
+    "url": "https://github.com/de-souza/"
+  },
+  "locales": {
+    "en-US": {
+      "name": "KaiOS Template",
+      "subtitle": "A simple template for building KaiOS apps",
+      "description": "A simple template for building KaiOS apps"
+    }
+  },
+  "default_locale": "en-US"
+}
