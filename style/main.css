@@ -13,7 +13,7 @@ body {
 
 main {
   flex-grow: 1;
-  background: #1cc;
+  /* background: #1cc; */
 }
 
 h1 {
@@ -25,12 +25,12 @@ h1 {
   padding: 0 0.625rem;
 }
 
-.Skbar {
+.Softkeys {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
 }
 
-.Skbar-button {
+.Softkeys-button {
   font: 600 0.875rem/1.875rem "Open Sans";
   letter-spacing: -0.025rem;
   color: #323232;
@@ -39,16 +39,16 @@ h1 {
   border: unset;
 }
 
-.Skbar-button:first-child {
+.Softkeys-button--left {
   text-align: left;
 }
 
-.Skbar-button:nth-child(2) {
+.Softkeys-button--center {
   font: bold 1rem "Open Sans";
   text-transform: uppercase;
 }
 
-.Skbar-button:last-child {
+.Softkeys-button--right {
   text-align: right;
 }
 
