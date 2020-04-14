@@ -20,8 +20,7 @@ body {
 }
 
 main {
-  flex-grow: 1;
-  /* background: #1cc; */
+  flex: auto;
 }
 
 h1 {
@@ -40,6 +39,9 @@ h1 {
 
 .List-item {
   font: 1.7rem/6rem "Open Sans";
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 0 1rem;
   list-style: none;
 }
@@ -47,7 +49,6 @@ h1 {
 .List-item::after {
   content: "\F19B";
   font: 500 3.2rem "gaia-icons";
-  vertical-align: middle;
   color: #8c8c8c;
 }
 
