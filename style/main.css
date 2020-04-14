@@ -13,13 +13,14 @@ body {
 
 main {
   flex-grow: 1;
+  background: #1cc;
 }
 
 h1 {
   font: 300 1.0625rem/1.75rem "Open Sans";
   text-align: center;
   color: white;
-  background: #1bc56f;
+  background: #144;
   margin: 0;
   padding: 0 0.625rem;
 }
