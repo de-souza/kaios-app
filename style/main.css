@@ -20,7 +20,8 @@ body {
 }
 
 main {
-  flex: auto;
+  flex: 1 1 0;
+  overflow: auto;
 }
 
 h1 {
@@ -32,37 +33,40 @@ h1 {
   padding: 0 1rem;
 }
 
-.List {
+ul {
   margin: unset;
   padding: unset;
 }
 
-.List-item {
+li {
+  list-style: unset;
+}
+
+.ListItem {
   font: 1.7rem/6rem "Open Sans";
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
-  list-style: unset;
 }
 
-.List-item::after {
+.ListItem::after {
   content: "\F19B";
   font: 500 3.2rem "gaia-icons";
   color: #8c8c8c;
 }
 
-.List-item:focus {
+.ListItem:focus {
   color: white;
   background: #1dd;
   outline: unset;
 }
 
-.List-item:focus::after {
+.ListItem:focus::after {
   color: white;
 }
 
-.Softkeys {
+.Skbar {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: 0.5rem;
@@ -70,7 +74,7 @@ h1 {
   padding: 0 0.5rem;
 }
 
-.Softkeys-button {
+.Skbar-key {
   font: 600 1.4rem/3rem "Open Sans";
   letter-spacing: -0.04rem;
   color: #323232;
@@ -80,16 +84,16 @@ h1 {
   min-width: 3rem;
 }
 
-.Softkeys-button--left {
+.Skbar-key--left {
   text-align: left;
 }
 
-.Softkeys-button--center {
+.Skbar-key--center {
   font: 700 1.6rem/3rem "Open Sans";
   text-transform: uppercase;
 }
 
-.Softkeys-button--right {
+.Skbar-key--right {
   text-align: right;
 }
 
