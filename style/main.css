@@ -16,7 +16,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  margin: 0;
+  margin: unset;
 }
 
 main {
@@ -28,13 +28,13 @@ h1 {
   text-align: center;
   color: white;
   background: #144;
-  margin: 0;
+  margin: unset;
   padding: 0 1rem;
 }
 
 .List {
-  margin: 0;
-  padding: 0;
+  margin: unset;
+  padding: unset;
 }
 
 .List-item {
@@ -43,13 +43,23 @@ h1 {
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
-  list-style: none;
+  list-style: unset;
 }
 
 .List-item::after {
   content: "\F19B";
   font: 500 3.2rem "gaia-icons";
   color: #8c8c8c;
+}
+
+.List-item:focus {
+  color: white;
+  background: #1dd;
+  outline: unset;
+}
+
+.List-item:focus::after {
+  color: white;
 }
 
 .Softkeys {
@@ -67,6 +77,7 @@ h1 {
   background: unset;
   padding: unset;
   border: unset;
+  min-width: 3rem;
 }
 
 .Softkeys-button--left {
@@ -74,7 +85,7 @@ h1 {
 }
 
 .Softkeys-button--center {
-  font: 700 1.6rem "Open Sans";
+  font: 700 1.6rem/3rem "Open Sans";
   text-transform: uppercase;
 }
 
