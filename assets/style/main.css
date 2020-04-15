@@ -1,11 +1,11 @@
 @font-face {
   font-family: "Open Sans";
-  src: url("OpenSans-Regular-webfont.woff2");
+  src: url("../fonts/OpenSans-Regular-webfont.woff2");
 }
 
 @font-face {
   font-family: "gaia-icons";
-  src: url("gaia-icons.ttf");
+  src: url("../fonts/gaia-icons.ttf");
 }
 
 html {
