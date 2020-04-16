@@ -1,12 +1,12 @@
 {
   "version": "1.0",
-  "name": "KaiOS Template",
+  "name": "KaiOS App",
   "description": "A simple template for building KaiOS apps",
   "type": "web",
   "launch_path": "/index.html",
   "icons": {
-    "56": "/assets/icons/KaiOSTemplate_56.png",
-    "112": "/assets/icons/KaiOSTemplate_112.png"
+    "56": "/assets/icons/KaiOSApp_56.png",
+    "112": "/assets/icons/KaiOSApp_112.png"
   },
   "developer": {
     "name": "Léo De Souza",
