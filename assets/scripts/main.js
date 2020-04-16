@@ -18,9 +18,9 @@ function menuNavigationListener(e) {
   }
 }
 
-function focusMenuItem(newMenuItem) {
-  newMenuItem.focus();
-  scrollToMenuItem(newMenuItem);
+function focusMenuItem(menuItem) {
+  menuItem.focus();
+  scrollToMenuItem(menuItem);
 }
 
 function previousMenuItem(currentMenuItem) {
