@@ -1,2 +1,2 @@
-# KaiOS Template
+# KaiOS App
 A simple template for building KaiOS applications
