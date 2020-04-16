@@ -1,7 +1,7 @@
 # KaiOS App
 A simple template for building KaiOS applications
 
-## Testing with Firefox
+## Test with Firefox
 
 1. Open https://de-souza.github.io/kaios-app/
 2. Press Ctrl + Shift + M
