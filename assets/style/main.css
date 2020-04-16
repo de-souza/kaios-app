@@ -19,11 +19,6 @@ body {
   margin: unset;
 }
 
-main {
-  flex: 1 1 0;
-  overflow: auto;
-}
-
 h1 {
   font: 300 1.7rem/2.8rem "Open Sans";
   text-align: center;
@@ -42,7 +37,12 @@ li {
   list-style: unset;
 }
 
-.MenuItem {
+.Menu {
+  flex: 1 1 0;
+  overflow: auto;
+}
+
+.Menu-item {
   font: 1.7rem/6rem "Open Sans";
   display: flex;
   align-items: center;
@@ -52,19 +52,19 @@ li {
   text-decoration: unset;
 }
 
-.MenuItem::after {
+.Menu-item::after {
   content: "\F19B";
   font: 500 3.2rem "gaia-icons";
   color: #8c8c8c;
 }
 
-.MenuItem:focus {
+.Menu-item:focus {
   color: white;
   background: #1dd;
   outline: unset;
 }
 
-.MenuItem:focus::after {
+.Menu-item:focus::after {
   color: white;
 }
 

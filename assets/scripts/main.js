@@ -4,42 +4,49 @@ document.getElementById("Autofocus").focus();
 document.addEventListener("keydown", menuNavigationListener);
 
 function menuNavigationListener(e) {
-  if (e.target.matches(".MenuItem")) {
+  if (e.target.matches(".Menu-item")) {
     switch(e.key) {
     case "ArrowUp":
-      menuUp(e);
-      break;
+      return menuUp(e);
     case "ArrowDown":
-      menuDown(e);
-      break;
+      return menuDown(e);
     }
   }
 }
 
 function menuUp(e) {
-  let newItem = previousListItem(e.target.parentElement).firstElementChild;
-  newItem.scrollIntoView({block: "nearest"});
-  newItem.focus();
+  let newMenuItem = previousListItem(e.target.parentElement).firstElementChild;
+  newMenuItem.focus();
+  scrollToMenuItem(newMenuItem);
   e.preventDefault();
 }
 
 function menuDown(e) {
-  let newItem = nextListItem(e.target.parentElement).firstElementChild;
-  newItem.scrollIntoView({block: "nearest"});
-  newItem.focus();
+  let newMenuItem = nextListItem(e.target.parentElement).firstElementChild;
+  newMenuItem.focus();
+  scrollToMenuItem(newMenuItem);
   e.preventDefault();
 }
 
-function previousListItem(li) {
-  if (li.previousElementSibling)
-    return li.previousElementSibling;
+function previousListItem(current) {
+  if (current.previousElementSibling)
+    return current.previousElementSibling;
   else
-    return li.parentElement.lastElementChild;
+    return current.parentElement.lastElementChild;
 }
 
-function nextListItem(li) {
-  if (li.nextElementSibling)
-    return li.nextElementSibling;
+function nextListItem(current) {
+  if (current.nextElementSibling)
+    return current.nextElementSibling;
   else
-    return li.parentElement.firstElementChild;
+    return current.parentElement.firstElementChild;
+}
+
+function scrollToMenuItem(newMenuItem) {
+  const menuItemRect = newMenuItem.getBoundingClientRect();
+  const menuRect = newMenuItem.closest(".Menu").getBoundingClientRect();
+  if (menuItemRect.top < menuRect.top)
+    newMenuItem.scrollIntoView(true);
+  else if (menuItemRect.bottom > menuRect.bottom)
+    newMenuItem.scrollIntoView(false);
 }
