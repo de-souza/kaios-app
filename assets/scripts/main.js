@@ -1,28 +1,45 @@
 "use strict";
 
 document.getElementById("Autofocus").focus();
-document.addEventListener("keydown", listNavigation);
+document.addEventListener("keydown", menuNavigationListener);
 
-function listNavigation(e) {
-  if (e.target.matches("li")) {
-    if (e.key == "ArrowUp" || e.key == "ArrowDown") {
-      e.preventDefault();
-      nextFocusedElment(e).focus();
+function menuNavigationListener(e) {
+  if (e.target.matches(".MenuItem")) {
+    switch(e.key) {
+    case "ArrowUp":
+      menuUp(e);
+      break;
+    case "ArrowDown":
+      menuDown(e);
+      break;
     }
   }
 }
 
-function nextFocusedElment(e) {
-  switch(e.key) {
-  case "ArrowUp":
-    if (e.target.previousElementSibling)
-      return e.target.previousElementSibling;
-    else
-      return e.target.parentElement.lastElementChild;
-  case "ArrowDown":
-    if (e.target.nextElementSibling)
-      return e.target.nextElementSibling;
-    else
-      return e.target.parentElement.firstElementChild;
-  }
+function menuUp(e) {
+  let newItem = previousListItem(e.target.parentElement).firstElementChild;
+  newItem.scrollIntoView({block: "nearest"});
+  newItem.focus();
+  e.preventDefault();
+}
+
+function menuDown(e) {
+  let newItem = nextListItem(e.target.parentElement).firstElementChild;
+  newItem.scrollIntoView({block: "nearest"});
+  newItem.focus();
+  e.preventDefault();
+}
+
+function previousListItem(li) {
+  if (li.previousElementSibling)
+    return li.previousElementSibling;
+  else
+    return li.parentElement.lastElementChild;
+}
+
+function nextListItem(li) {
+  if (li.nextElementSibling)
+    return li.nextElementSibling;
+  else
+    return li.parentElement.firstElementChild;
 }

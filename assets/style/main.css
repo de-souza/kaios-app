@@ -42,27 +42,29 @@ li {
   list-style: unset;
 }
 
-.ListItem {
+.MenuItem {
   font: 1.7rem/6rem "Open Sans";
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
+  color: unset;
+  text-decoration: unset;
 }
 
-.ListItem::after {
+.MenuItem::after {
   content: "\F19B";
   font: 500 3.2rem "gaia-icons";
   color: #8c8c8c;
 }
 
-.ListItem:focus {
+.MenuItem:focus {
   color: white;
   background: #1dd;
   outline: unset;
 }
 
-.ListItem:focus::after {
+.MenuItem:focus::after {
   color: white;
 }
 
