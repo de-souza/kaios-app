@@ -2,9 +2,8 @@
 
 const states = {
   State: class {
-    constructor(template, handler, data) {
-      this.template = template;
-      this.handler = handler;
+    constructor(type, data) {
+      this.type = type,
       this.data = data;
     }
   },
@@ -12,9 +11,9 @@ const states = {
   load(state) {
     const discarded = document.getElementsByClassName("Main")[0];
     const replacement = discarded.cloneNode();
-    replacement.appendChild(state.template(state.data));
+    replacement.appendChild(templates[state.type](state.data));
     discarded.replaceWith(replacement);
-    state.handler();
+    handlers[state.type]();
     // history.pushState(state, "");
   },
 };
@@ -105,8 +104,7 @@ const selectors = {
 
 states.load(
   new states.State(
-    templates.menu,
-    handlers.menu,
+    "menu",
     [
       {
         text: "New game",
