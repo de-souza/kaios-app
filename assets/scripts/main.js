@@ -1,55 +1,126 @@
 "use strict";
 
-document.getElementById("Autofocus").focus();
-document.addEventListener("keydown", menuNavigationListener);
-
-function menuNavigationListener(e) {
-  if (e.target.matches(".Menu-item")) {
-    switch(e.key) {
-    case "ArrowUp":
-      focusMenuItem(previousMenuItem(e.target));
-      e.preventDefault();
-      break;
-    case "ArrowDown":
-      focusMenuItem(nextMenuItem(e.target));
-      e.preventDefault();
-      break;
+const states = {
+  State: class {
+    constructor(template, data) {
+      this.template = template;
+      this.data = data;
     }
-  }
+  },
+
+  load(state) {
+    const main = document.getElementsByClassName("Main")[0];
+    main.innerHTML = "";
+    main.appendChild(state.template(state.data));
+    navigation.select(document.getElementById("Autofocus"));
+    // history.pushState(state, "");
+  },
+};
+
+const templates = {
+  item(data) {
+    const li = document.createElement("li");
+    li.className = "Item";
+    li.tabIndex = -1;
+    li.textContent = data.text;
+    if (data.action) {
+      li.dataset.action = data.action;
+      li.classList.add("Item--action");
+    }
+    return li;
+  },
+
+  menu(data) {
+    const ul = document.createElement("ul");
+    data.forEach(itemData => ul.appendChild(templates.item(itemData)));
+    const focusIdx = data.findIndex(itemData => itemData.autofocus);
+    const focused = (focusIdx === -1) ? ul.firstChild : ul.children[focusIdx];
+    focused.id = "Autofocus";
+    return ul;
+  },
+
+  game(data) {
+    // TODO
+  },
+};
+
+const listeners = {
+  keyboardListener(event) {
+    if (event.target.matches(".Item")) {
+      switch(event.key) {
+      case "ArrowUp":
+        navigation.select(selectors.loopedPreviousSibling(event.target));
+        event.preventDefault();
+        break;
+      case "ArrowDown":
+        navigation.select(selectors.loopedNextSibling(event.target));
+        event.preventDefault();
+        break;
+      }
+    }
+  },
+};
+
+const navigation = {
+  select(element) {
+    element.focus();
+    navigation.scrollInParent(element, selectors.closestOverflown(element));
+  },
+
+  scrollInParent(element, parent) {
+    if (parent) {
+      const elementRect = element.getBoundingClientRect();
+      const parentRect = parent.getBoundingClientRect();
+      if (elementRect.top < parentRect.top)
+        element.scrollIntoView();
+      else if (elementRect.bottom > parentRect.bottom)
+        element.scrollIntoView(false);
+    }
+  },
+};
+
+const selectors = {
+  loopedPreviousSibling(node) {
+    if (node.previousSibling)
+      return node.previousSibling;
+    else
+      return node.parentNode.lastChild;
+  },
+
+  loopedNextSibling(node) {
+    if (node.nextSibling)
+      return node.nextSibling;
+    else
+      return node.parentNode.firstChild;
+  },
+
+  closestOverflown(element) {
+    if (element === null || (element.scrollHeight > element.clientHeight))
+      return element;
+    else
+      return selectors.closestOverflown(element.parentElement);
+  },
 }
 
-function focusMenuItem(menuItem) {
-  menuItem.focus();
-  scrollToMenuItem(menuItem);
-}
+states.load(
+  new states.State(
+    templates.menu,
+    [
+      {
+        text: "New game",
+        action: "newGame",
+      },
+      {
+        text: "Continue",
+        action: "newGame",
+        autofocus: true,
+      },
+      {
+        text: "High scores",
+        action: "highScores",
+      },
+    ],
+  )
+);
 
-function previousMenuItem(currentMenuItem) {
-  return previousListItem(currentMenuItem.parentElement).firstElementChild;
-}
-
-function nextMenuItem(currentMenuItem) {
-  return nextListItem(currentMenuItem.parentElement).firstElementChild;
-}
-
-function previousListItem(currentListItem) {
-  if (currentListItem.previousElementSibling)
-    return currentListItem.previousElementSibling;
-  else
-    return currentListItem.parentElement.lastElementChild;
-}
-
-function nextListItem(currentListItem) {
-  if (currentListItem.nextElementSibling)
-    return currentListItem.nextElementSibling;
-  else
-    return currentListItem.parentElement.firstElementChild;
-}
-
-function scrollToMenuItem(menuItem) {
-  const menuItemRect = menuItem.getBoundingClientRect();
-  const menuRect = menuItem.closest(".Menu").getBoundingClientRect();
-  if (menuItemRect.top < menuRect.top)
-    menuItem.scrollIntoView(true);
-  else if (menuItemRect.bottom > menuRect.bottom)
-    menuItem.scrollIntoView(false);
-}
+document.addEventListener("keydown", listeners.keyboardListener);

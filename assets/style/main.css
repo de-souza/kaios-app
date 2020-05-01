@@ -37,12 +37,12 @@ li {
   padding: 0 1rem;
 }
 
-.Menu {
+.Main {
   flex: 1 1 0;
   overflow: auto;
 }
 
-.Menu-item {
+.Item {
   font: 1.7rem/6rem "Open Sans";
   display: flex;
   align-items: center;
@@ -52,19 +52,19 @@ li {
   text-decoration: unset;
 }
 
-.Menu-item::after {
+.Item::after {
   content: "\F19B";
   font: 500 3.2rem "gaia-icons";
   color: #8c8c8c;
 }
 
-.Menu-item:focus {
+.Item:focus {
   color: white;
   background: #1dd;
   outline: unset;
 }
 
-.Menu-item:focus::after {
+.Item:focus::after {
   color: white;
 }
 
