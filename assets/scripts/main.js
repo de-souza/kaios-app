@@ -2,22 +2,30 @@
 
 const states = {
   State: class {
-    constructor(template, data) {
+    constructor(template, handler, data) {
       this.template = template;
+      this.handler = handler;
       this.data = data;
     }
   },
 
   load(state) {
-    const main = document.getElementsByClassName("Main")[0];
-    main.innerHTML = "";
-    main.appendChild(state.template(state.data));
-    navigation.focus(document.getElementById("Autofocus"));
+    const discarded = document.getElementsByClassName("Main")[0];
+    const replacement = discarded.cloneNode();
+    replacement.appendChild(state.template(state.data));
+    discarded.replaceWith(replacement);
+    state.handler();
     // history.pushState(state, "");
   },
 };
 
 const templates = {
+  menu(data) {
+    const ul = document.createElement("ul");
+    data.forEach(itemData => ul.appendChild(templates.item(itemData)));
+    return ul;
+  },
+
   item(data) {
     const li = document.createElement("li");
     li.className = "Item";
@@ -32,16 +40,30 @@ const templates = {
     return li;
   },
 
-  menu(data) {
-    const ul = document.createElement("ul");
-    data.forEach(itemData => ul.appendChild(templates.item(itemData)));
-    return ul;
-  },
-
   game(data) {
     // TODO
   },
 };
+
+const handlers = {
+  menu() {
+    navigation.focus(document.getElementById("Autofocus"));
+    document.addEventListener("keydown", event => {
+      if (event.target.matches(".Item")) {
+        switch(event.key) {
+        case "ArrowUp":
+          navigation.focus(selectors.loopedPreviousSibling(event.target));
+          event.preventDefault();
+          break;
+        case "ArrowDown":
+          navigation.focus(selectors.loopedNextSibling(event.target));
+          event.preventDefault();
+          break;
+        }
+      }
+    });
+  },
+}
 
 const navigation = {
   focus(element) {
@@ -54,21 +76,6 @@ const navigation = {
         element.scrollIntoView();
       else if (elementRect.bottom > parentRect.bottom)
         element.scrollIntoView(false);
-    }
-  },
-
-  menuListener(event) {
-    if (event.target.matches(".Item")) {
-      switch(event.key) {
-      case "ArrowUp":
-        navigation.focus(selectors.loopedPreviousSibling(event.target));
-        event.preventDefault();
-        break;
-      case "ArrowDown":
-        navigation.focus(selectors.loopedNextSibling(event.target));
-        event.preventDefault();
-        break;
-      }
     }
   },
 };
@@ -99,6 +106,7 @@ const selectors = {
 states.load(
   new states.State(
     templates.menu,
+    handlers.menu,
     [
       {
         text: "New game",
@@ -117,4 +125,3 @@ states.load(
   )
 );
 
-document.addEventListener("keydown", navigation.keyboardListener);
