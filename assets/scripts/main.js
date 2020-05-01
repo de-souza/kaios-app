@@ -1,27 +1,46 @@
 "use strict";
 
 const states = {
-  State: class {
-    constructor(type, data) {
-      this.type = type,
-      this.data = data;
-    }
+  init(state) {
+    states.update(state);
+    states.display(state);
+    window.onpopstate = event => states.display(event.state);
   },
 
-  load(state) {
-    const discarded = document.getElementsByClassName("Main")[0];
-    const replacement = discarded.cloneNode();
-    replacement.appendChild(templates[state.type](state.data));
-    discarded.replaceWith(replacement);
+  update(state) {
+    history.replaceState(state, "");
+  },
+
+  push(state) {
+    history.pushState(state, "");
+    states.display(state);
+  },
+
+  display(state) {
+    const root = document.getElementsByClassName("Main")[0];
+    const newRoot = root.cloneNode();
+    newRoot.appendChild(templates[state.type](state.data));
+    root.replaceWith(newRoot);
     handlers[state.type]();
-    // history.pushState(state, "");
+  },
+
+  highScores: {
+    type: "menu",
+    data: [
+      { text: "Best score" },
+      { text: "Average score" },
+      { text: "Worst score" },
+    ],
   },
 };
 
 const templates = {
   menu(data) {
     const ul = document.createElement("ul");
-    data.forEach(itemData => ul.appendChild(templates.item(itemData)));
+    data.forEach(data => ul.appendChild(templates.item(data)));
+    const focusIdx = data.findIndex(data => data.autofocus);
+    const focused = (focusIdx === -1) ? ul.firstChild : ul.children[focusIdx];
+    focused.id = "Autofocus";
     return ul;
   },
 
@@ -30,12 +49,10 @@ const templates = {
     li.className = "Item";
     li.tabIndex = -1;
     li.textContent = data.text;
-    if (data.action) {
-      li.dataset.action = data.action;
-      li.classList.add("Item--action");
+    if (data.state) {
+      li.dataset.state = data.state;
+      li.classList.add("Item--link");
     }
-    if (data.autofocus)
-      li.id = "Autofocus";
     return li;
   },
 
@@ -47,35 +64,70 @@ const templates = {
 const handlers = {
   menu() {
     navigation.focus(document.getElementById("Autofocus"));
-    document.addEventListener("keydown", event => {
-      if (event.target.matches(".Item")) {
-        switch(event.key) {
-        case "ArrowUp":
-          navigation.focus(selectors.loopedPreviousSibling(event.target));
-          event.preventDefault();
-          break;
-        case "ArrowDown":
-          navigation.focus(selectors.loopedNextSibling(event.target));
-          event.preventDefault();
-          break;
-        }
+    const updateStateFocus = () => {
+      const state = history.state;
+      state.data.map(data => delete data.autofocus);
+      const focused = document.activeElement;
+      const focusIdx = [...focused.parentNode.children].indexOf(focused);
+      if (focusIdx !== -1)
+        state.data[focusIdx].autofocus = true;
+      states.update(state);
+    };
+    const root = document.getElementsByClassName("Main")[0];
+    root.onkeydown = event => {
+      switch(event.key) {
+      case "ArrowUp":
+        navigation.focusPrevious(event.target);
+        updateStateFocus();
+        return false;
+      case "ArrowDown":
+        navigation.focusNext(event.target);
+        updateStateFocus();
+        return false;
+      case " ":
+        navigation.activate(event.target);
+        return false;
+      case "Escape":
+        history.back();
+        return false;
       }
-    });
+    };
+    root.onclick = event => navigation.activate(event.target);
   },
-}
+
+  game(data) {
+    // TODO
+  }
+};
 
 const navigation = {
   focus(element) {
     element.focus();
     const overflownParent = selectors.closestOverflown(element);
-    if (overflownParent) {
-      const elementRect = element.getBoundingClientRect();
-      const parentRect = overflownParent.getBoundingClientRect();
-      if (elementRect.top < parentRect.top)
-        element.scrollIntoView();
-      else if (elementRect.bottom > parentRect.bottom)
-        element.scrollIntoView(false);
-    }
+    if (overflownParent)
+      navigation.scrollIfHidden(element, overflownParent);
+  },
+
+  focusPrevious(element) {
+    navigation.focus(selectors.loopedPreviousSibling(element));
+  },
+
+  focusNext(element) {
+    navigation.focus(selectors.loopedNextSibling(element));
+  },
+
+  activate(element) {
+    if (element.dataset.state)
+      states.push(states[element.dataset.state]);
+  },
+
+  scrollIfHidden(element, parent) {
+    const elementRect = element.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
+    if (elementRect.top < parentRect.top)
+      element.scrollIntoView();
+    else if (elementRect.bottom > parentRect.bottom)
+      element.scrollIntoView(false);
   },
 };
 
@@ -100,26 +152,22 @@ const selectors = {
     else
       return selectors.closestOverflown(element.parentElement);
   },
-}
+};
 
-states.load(
-  new states.State(
-    "menu",
-    [
-      {
-        text: "New game",
-        action: "newGame",
-        autofocus: true,
-      },
-      {
-        text: "Continue",
-        action: "newGame",
-      },
-      {
-        text: "High scores",
-        action: "highScores",
-      },
-    ],
-  )
-);
-
+states.init({
+  type: "menu",
+  data: [
+    {
+      text: "New game",
+      // state: "newGame",
+    },
+    {
+      text: "Continue",
+      // state: "newGame",
+    },
+    {
+      text: "High scores",
+      state: "highScores",
+    },
+  ],
+});
