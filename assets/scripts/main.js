@@ -27,15 +27,14 @@ const templates = {
       li.dataset.action = data.action;
       li.classList.add("Item--action");
     }
+    if (data.autofocus)
+      li.id = "Autofocus";
     return li;
   },
 
   menu(data) {
     const ul = document.createElement("ul");
     data.forEach(itemData => ul.appendChild(templates.item(itemData)));
-    const focusIdx = data.findIndex(itemData => itemData.autofocus);
-    const focused = (focusIdx === -1) ? ul.firstChild : ul.children[focusIdx];
-    focused.id = "Autofocus";
     return ul;
   },
 
